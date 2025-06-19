@@ -138,3 +138,98 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+
+
+
+activity_detail.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>   </resources>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvPlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:paddingBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnAverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calculate Average Rating"
+            android:textColor="#FFFFFF"
+            android:background="#333333"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to Main Screen"
+            android:textColor="#FFFFFF"
+            android:background="#333333"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>
+
+
+
+
+DetailActivity.kt
+
+
+package vcmsa.ci.playlistmanagerapp
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class DetailActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_detail)
+
+        val tvPlaylist = findViewById<TextView>(R.id.tvPlaylist)
+        val btnAverage = findViewById<Button>(R.id.btnAverage)
+        val btnBack = findViewById<Button>(R.id.btnBack)
+
+        val songs = intent.getStringArrayListExtra("songs") ?: arrayListOf()
+        val artists = intent.getStringArrayListExtra("artists") ?: arrayListOf()
+        val ratings = intent.getFloatArrayExtra("ratings") ?: floatArrayOf()
+        val comments = intent.getStringArrayListExtra("comments") ?: arrayListOf()
+
+        val details = StringBuilder()
+        for (i in songs.indices) {
+            details.append("Song: ${songs[i]}\nArtist: ${artists[i]}\nRating: ${ratings[i]}\nComment: ${comments[i]}\n\n")
+        }
+
+        tvPlaylist.text = details.toString()
+
+        btnAverage.setOnClickListener {
+            if (ratings.isNotEmpty()) {
+                val avg = ratings.sum() / ratings.size
+                tvPlaylist.append("\nAverage Rating: %.1f".format(avg))
+            }
+        }
+
+        btnBack.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+    }
+}
