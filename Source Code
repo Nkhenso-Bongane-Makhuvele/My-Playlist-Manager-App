@@ -3,31 +3,138 @@
 activity_main.xml
 
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:padding="16dp"
-android:background="#000000">
-
-<EditText
-    android:id="@+id/etPlaylistName"
+<resources> </resources>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Enter Playlist Name"
-    android:textColorHint="#888888"
-    android:textColor="#FFFFFF"
-    android:background="#222222" />
+    android:layout_height="match_parent"
+    android:background="#000000">
 
-<Button
-    android:id="@+id/btnCreate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Create Playlist"
-    android:textColor="#FFFFFF"
-    android:background="#333333"
-    android:layout_marginTop="16dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/etSong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Song Title"
+            android:textColorHint="#888888"
+            android:textColor="#FFFFFF"
+            android:background="#222222" />
 
+        <EditText
+            android:id="@+id/etArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Artist"
+            android:textColorHint="#888888"
+            android:textColor="#FFFFFF"
+            android:background="#222222"
+            android:layout_marginTop="8dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comment"
+            android:textColorHint="#888888"
+            android:textColor="#FFFFFF"
+            android:background="#222222"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnAddSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Playlist"
+            android:textColor="#FFFFFF"
+            android:background="#333333"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnViewPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Playlist"
+            android:textColor="#FFFFFF"
+            android:background="#333333"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exit App"
+            android:textColor="#FFFFFF"
+            android:background="#333333"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>
+
+
+
+MainActivity.kt
+
+package vcmsa.ci.playlistmanagerapp
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    private val songs = mutableListOf<String>()
+    private val artists = mutableListOf<String>()
+    private val ratings = mutableListOf<Float>()
+    private val comments = mutableListOf<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val etSong = findViewById<EditText>(R.id.etSong)
+        val etArtist = findViewById<EditText>(R.id.etArtist)
+        val ratingBar = findViewById<RatingBar>(R.id.ratingBar)
+        val etComment = findViewById<EditText>(R.id.etComment)
+
+        val btnAdd = findViewById<Button>(R.id.btnAddSong)
+        val btnDetails = findViewById<Button>(R.id.btnViewPlaylist)
+        val btnExit = findViewById<Button>(R.id.btnExit)
+
+        btnAdd.setOnClickListener {
+            songs.add(etSong.text.toString())
+            artists.add(etArtist.text.toString())
+            ratings.add(ratingBar.rating)
+            comments.add(etComment.text.toString())
+
+            etSong.text.clear()
+            etArtist.text.clear()
+            ratingBar.rating = 0f
+            etComment.text.clear()
+        }
+
+        btnDetails.setOnClickListener {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putStringArrayListExtra("songs", ArrayList(songs))
+            intent.putStringArrayListExtra("artists", ArrayList(artists))
+            intent.putExtra("ratings", ratings.toFloatArray())
+            intent.putStringArrayListExtra("comments", ArrayList(comments))
+            startActivity(intent)
+        }
+
+        btnExit.setOnClickListener {
+            finishAffinity()
+        }
+    }
+}
