@@ -88,10 +88,12 @@ MainActivity.kt
 
 package vcmsa.ci.playlistmanagerapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.finishAffinity
 
 class MainActivity : AppCompatActivity() {
     private val songs = mutableListOf<String>()
@@ -99,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     private val ratings = mutableListOf<Float>()
     private val comments = mutableListOf<String>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -133,74 +136,62 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        btnExit.setOnClickListener {
-            finishAffinity()
+        fun findViewById(value: Any) {
+            TODO("Not yet implemented")
+        }
+
+        fun setContentView(value: Any) {
+            TODO("Not yet implemented")
         }
     }
 }
 
 
 
-
 activity_detail.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<resources>   </resources>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/tvPlaylist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:paddingBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnAverage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Calculate Average Rating"
-            android:textColor="#FFFFFF"
-            android:background="#333333"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back to Main Screen"
-            android:textColor="#FFFFFF"
-            android:background="#333333"
-            android:layout_marginTop="8dp" />
-    </LinearLayout>
-</ScrollView>
-
-
-
-
-DetailActivity.kt
-
 
 package vcmsa.ci.playlistmanagerapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+
+private fun Nothing?.getStringArrayListExtra(string: String) {
+    TODO("Not yet implemented")
+}
+
+private fun Unit.setOnClickListener(function: () -> Unit) {
+    TODO("Not yet implemented")
+}
+
+private fun Unit.append(string: String) {
+    TODO("Not yet implemented")
+}
+
+private fun Nothing?.getFloatArrayExtra(str: String) {
+    TODO("Not yet implemented")
+}
+
+private fun Unit.sum() {
+    TODO("Not yet implemented")
+}
+
+private fun Unit.get(value: Any): String {
+    TODO("Not yet implemented")
+}
+
+private fun Unit.div(value: Any) {
+    TODO("Not yet implemented")
+}
 
 class DetailActivity : AppCompatActivity() {
+    @java.lang.Override
+    setContentView(R.layout.main)
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -209,21 +200,24 @@ class DetailActivity : AppCompatActivity() {
         val btnAverage = findViewById<Button>(R.id.btnAverage)
         val btnBack = findViewById<Button>(R.id.btnBack)
 
-        val songs = intent.getStringArrayListExtra("songs") ?: arrayListOf()
-        val artists = intent.getStringArrayListExtra("artists") ?: arrayListOf()
-        val ratings = intent.getFloatArrayExtra("ratings") ?: floatArrayOf()
-        val comments = intent.getStringArrayListExtra("comments") ?: arrayListOf()
+        val intent = null
+        val songs = intent.getStringArrayListExtra("songs")
+        val artists = intent.getStringArrayListExtra("artists")
+        val ratings = intent.getFloatArrayExtra("ratings")
+        val comments = intent.getStringArrayListExtra("comments")
 
         val details = StringBuilder()
         for (i in songs.indices) {
-            details.append("Song: ${songs[i]}\nArtist: ${artists[i]}\nRating: ${ratings[i]}\nComment: ${comments[i]}\n\n")
+            val append = details.append(
+                /* str = */ getString(/* resId = */ R.string.song_artist_rating_comment, /* ...formatArgs = */ songs[i], artists.get(i), ratings.get(i), comments[i])
+            )
         }
 
         tvPlaylist.text = details.toString()
 
         btnAverage.setOnClickListener {
-            if (ratings.isNotEmpty()) {
-                val avg = ratings.sum() / ratings.size
+            if (ratings.isNotEmpty) {
+                val avg = ratings.sum().div(ratings.size)
                 tvPlaylist.append("\nAverage Rating: %.1f".format(avg))
             }
         }
@@ -232,4 +226,17 @@ class DetailActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
+
+    override fun setContentView(n: Int) {
+        TODO("Not yet implemented")
+    }
+
+    private fun findViewById(i: Int) {
+        TODO("Not yet implemented")
+    }
 }
+
+private fun DetailActivity.startActivity(value: Any) {
+    TODO("Not yet implemented")
+}
+
